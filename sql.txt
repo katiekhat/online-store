@@ -1,0 +1,78 @@
+CREATE TABLE users (
+    id serial PRIMARY KEY,
+    email text NOT NULL UNIQUE,
+    password text,
+    first_name text,
+    last_name text,
+    last_login_date date,
+    active boolean NOT NULL DEFAULT true,
+    changed_by integer,
+    changed_at date,
+    created_by integer,
+    created_at date
+);
+CREATE TABLE countries (
+    id serial PRIMARY KEY,
+    iso_code_2 character(2) NOT NULL,
+    iso_code_3 character(3) NOT NULL,
+    name text NOT NULL,
+    name_geo text
+);
+CREATE TABLE companies (
+    id serial PRIMARY KEY,
+    parent_id integer,
+    country_id integer REFERENCES countries(id),
+    name text,
+    name_geo text,
+    active boolean NOT NULL DEFAULT true,
+    changed_by integer,
+    changed_at date,
+    created_by integer,
+    created_at date
+);
+CREATE TABLE products (
+    id serial PRIMARY KEY,
+    ean text NOT NULL UNIQUE,
+    name text,
+    company_id int REFERENCES companies(id),
+    country_id int REFERENCES countries(id),
+    description text,
+    active boolean NOT NULL DEFAULT true,
+    changed_by int,
+    changed_at date,
+    created_by int,
+    created_at date
+);
+INSERT INTO countries (iso_code_2, iso_code_3, name, name_geo)
+VALUES
+    ('US', 'USA', 'United States', 'ამერიკა'),
+    ('CA', 'CAN', 'Canada', 'კანადა'),
+    ('UK', 'GBR', 'United Kingdom', 'გაერთიანებული სამეფო'),
+	('GE', 'GEO', 'Georgia', 'საქართველო'),
+	('DE', 'DEU', 'Germany', 'გერმანია');
+
+INSERT INTO companies (id, parent_id, country_id, name, name_geo, active, created_at)
+VALUES
+    (1, 1, 1, 'ACNE Inc.', 'აკნე კომპ.', true, current_date),
+    (2, 2, 2, 'Maple Industries', 'მეიპლ ინდუსტრი', true, current_date),
+	(3, 3, 3, 'Sephora', 'სეფორა', true, current_date),
+	(4, 4, 4, 'Nikora', 'ნიკორა', true, current_date),
+	(5, 5, 4, 'Alta', 'ალტა', true, current_date),
+	(6, 6, 5, 'Liderfood', 'ლიდერფუდი', true, current_date);
+INSERT INTO users (email, password, first_name, last_name, created_at)
+VALUES
+    ('user1@gmail.com', 'password1', 'Keti', 'Khatiashvili', current_date),
+	('user2@gmail.com', 'password1', 'Mako', 'Borchashvili', current_date),
+    ('user3@gmail.com', 'password3', 'Mariam', 'Skhirtladze',current_date),
+	('user4@gmail.com', 'password4', 'Nino', 'Shiukashvili', current_date),
+	('user5@example.com', 'password5', 'Erekle', 'Lomsadze', current_date);
+	
+	INSERT INTO products (ean, name, company_id, country_id, description, active, changed_by, changed_at, created_by, created_at)
+VALUES
+    ('1234567890', 'cream', 1, 1, 'face cream', true, NULL, NULL, NULL, current_date),
+	('0987654321', 'Maple syrup', 2, 2, 'Maple syrup', true, NULL, NULL, NULL, current_date),
+	('2345678901', 'Hair brush', 3, 3, 'Hair brush', true, NULL, NULL, NULL, current_date),
+	('3987654321', 'Face mask', 3, 3, 'Face mask', true, NULL, NULL, NULL, current_date),
+	('4987654321', 'Sugar', 4, 4, 'Sugar', true, NULL, NULL, NULL, current_date),
+	('5987654321', 'Laptop', 5, 4, 'Laptop', true, NULL, NULL, NULL, current_date),
+	('6987654321', 'Sausage', 6, 5, 'Sausage', true, NULL, NULL, NULL, current_date);
