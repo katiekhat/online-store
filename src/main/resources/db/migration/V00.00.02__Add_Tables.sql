@@ -25,3 +25,6 @@ CREATE TABLE products (
     created_by int,
     created_at date
 );
+INSERT INTO users (email, password, first_name, last_name, created_at)
+VALUES
+    ('info@example.com', 'password1', 'Keti', 'Khatiashvili', now());
